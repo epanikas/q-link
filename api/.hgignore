@@ -1,3 +1,11 @@
 
 syntax: regexp
+^\.settings$
+syntax: regexp
+^bin$
+syntax: regexp
+^\.project$
+syntax: regexp
+^\.classpath$
+syntax: regexp
 ^target$

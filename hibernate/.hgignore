@@ -1,12 +1,11 @@
 
 syntax: regexp
-^\.classpath$
+^\.settings$
+syntax: regexp
+^bin$
 syntax: regexp
 ^\.project$
 syntax: regexp
-^\.settings$
+^\.classpath$
 syntax: regexp
 ^target$
-
-syntax: regexp
-^\.classpath$
