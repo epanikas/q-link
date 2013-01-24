@@ -1,12 +1,17 @@
 package com.googlecode.qlink.core.functor;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import com.googlecode.qlink.api.behavior.DoResultAsList;
 import com.googlecode.qlink.api.functor.Predicate;
+import com.googlecode.qlink.api.tuple.Pair;
 import com.googlecode.qlink.core.context.enums.EFilterCondition;
 import com.googlecode.qlink.core.context.enums.EFilterJunction;
 import com.googlecode.qlink.core.utils.SimpleAssert;
@@ -139,20 +144,51 @@ public class Predicates
 	@SuppressWarnings("unchecked")
 	public static boolean compareTwo(Object val1, EFilterCondition condition, Object val2)
 	{
-		if (condition != EFilterCondition.eq) {
+
+		if (condition != EFilterCondition.eq && condition != EFilterCondition.neq) {
+			SimpleAssert.notNull(val1);
+			SimpleAssert.notNull(val2);
+
+		}
+		if (condition != EFilterCondition.eq && condition != EFilterCondition.neq && condition != EFilterCondition.in) {
 			SimpleAssert.isTrue(val1 instanceof Comparable, val1 + " is not comparable");
-			SimpleAssert.isTrue(val2 instanceof Comparable, val2 + " is not comparable");
 		}
 
 		switch (condition) {
 			case eq:
 				return val1 == null ? val1 == val2 : val1.equals(val2);
 
+			case neq:
+				return val1 == null ? val1 != val2 : val1.equals(val2) == false;
+
 			case gt:
 				return ((Comparable<Object>) val1).compareTo(val2) > 0;
 
 			case lt:
 				return ((Comparable<Object>) val1).compareTo(val2) < 0;
+
+			case ge:
+				return ((Comparable<Object>) val1).compareTo(val2) >= 0;
+
+			case le:
+				return ((Comparable<Object>) val1).compareTo(val2) <= 0;
+
+			case between:
+				Pair<?, ?> param = (Pair<?, ?>) val2;
+				return ((Comparable<Object>) val1).compareTo(param.getFirst()) >= 0
+					&& ((Comparable<Object>) val1).compareTo(param.getSecond()) <= 0;
+
+			case in:
+				if (val2.getClass().isArray()) {
+					return CollectionUtils.cardinality(val1, Arrays.asList((Object[]) val2)) > 0;
+				}
+
+				if (val2 instanceof DoResultAsList<?, ?>) {
+					List<?> values = ((DoResultAsList<?, ?>) val2).toList();
+					return CollectionUtils.cardinality(val1, values) > 0;
+				}
+
+				throw new IllegalStateException("unrecognized parameter for in " + val2);
 
 			default:
 				throw new IllegalStateException("unrecognized condition " + condition);
