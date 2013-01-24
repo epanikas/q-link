@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.googlecode.q-link</groupId>
 		<artifactId>q-link-parent</artifactId>
-		<version>0.0.7</version>
+		<version>0.0.8-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>q-link-mem</artifactId>
@@ -17,13 +17,13 @@
 		<dependency>
 			<groupId>com.googlecode.q-link</groupId>
 			<artifactId>q-link-api</artifactId>
-			<version>0.0.7</version>
+			<version>0.0.8-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.googlecode.q-link</groupId>
 			<artifactId>q-link-core</artifactId>
-			<version>0.0.7</version>
+			<version>0.0.8-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
