@@ -14,7 +14,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import com.googlecode.qlink.hibernate.da.Person;
 import com.googlecode.qlink.hibernate.da.TestUtils;
-import com.googlecode.qlink.hibernate.factory.HibernateFactory;
+import com.googlecode.qlink.hibernate.factory.QLinkHibernateFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/da/test-db-config.xml"})
@@ -22,7 +22,7 @@ import com.googlecode.qlink.hibernate.factory.HibernateFactory;
 public class TestVisit
 {
 	@Autowired
-	private HibernateFactory hibernateFactory;
+	private QLinkHibernateFactory hibernateFactory;
 
 	@Autowired
 	private HibernateTemplate hibernateTemplate;

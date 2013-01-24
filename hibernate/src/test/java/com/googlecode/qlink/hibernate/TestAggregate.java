@@ -14,7 +14,7 @@ import com.googlecode.qlink.api.functor.Folder;
 import com.googlecode.qlink.api.tuple.Tuple3;
 import com.googlecode.qlink.hibernate.da.Person;
 import com.googlecode.qlink.hibernate.da.TestUtils;
-import com.googlecode.qlink.hibernate.factory.HibernateFactory;
+import com.googlecode.qlink.hibernate.factory.QLinkHibernateFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/da/test-db-config.xml"})
@@ -26,7 +26,7 @@ public class TestAggregate
 	private HibernateTemplate hibernateTemplate;
 
 	@Autowired
-	private HibernateFactory hibernateFactory;
+	private QLinkHibernateFactory hibernateFactory;
 
 	@Before
 	public void setUp()

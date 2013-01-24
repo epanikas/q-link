@@ -13,12 +13,12 @@ import com.googlecode.qlink.hibernate.utils.SqlAwareFunctionUtils;
 import com.googlecode.qlink.tuples.Tuples;
 
 
-public class HIbernateDoResultAsList<T, TPlugin>
+public class HibernateDoResultAsList<T, TPlugin>
 	extends HibernateDoResultSupport
 	implements DoResultAsList<T, TPlugin>
 {
 
-	public HIbernateDoResultAsList(IPipelineContext ctxt)
+	public HibernateDoResultAsList(IPipelineContext ctxt)
 	{
 		super(ctxt);
 	}

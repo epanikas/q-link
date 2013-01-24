@@ -6,7 +6,7 @@ import com.googlecode.qlink.api.behavior.DoResultAsMap;
 import com.googlecode.qlink.api.behavior.DoResultAsSingleValue;
 import com.googlecode.qlink.core.context.DefaultPipelineElementsFactory;
 import com.googlecode.qlink.core.context.IPipelineContext;
-import com.googlecode.qlink.hibernate.behavior.HIbernateDoResultAsList;
+import com.googlecode.qlink.hibernate.behavior.HibernateDoResultAsList;
 import com.googlecode.qlink.hibernate.behavior.HibernateDoResultAsMap;
 import com.googlecode.qlink.hibernate.behavior.HibernateDoResultAsSingleValue;
 
@@ -24,7 +24,7 @@ public class HibernatePipelineElementsFactory
 	public <T> T create(Class<T> cls)
 	{
 		if (cls.isAssignableFrom(DoResultAsList.class)) {
-			return (T) new HIbernateDoResultAsList(ctxt);
+			return (T) new HibernateDoResultAsList(ctxt);
 		}
 
 		if (cls.isAssignableFrom(DoResultAsMap.class)) {

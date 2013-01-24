@@ -58,6 +58,8 @@
 		<!-- property name="transactionManager" ref="transactionManager"/-->
 	</bean>
 	
-	<bean id="hibernate-factory" class="com.googlecode.qlink.hibernate.factory.HibernateFactory"/>
+	<bean id="hibernate-factory" class="com.googlecode.qlink.hibernate.factory.QLinkHibernateFactory">
+		<property name="hibernateTemplate" ref="hibernateTemplate" />
+	</bean>
 	
 </beans>

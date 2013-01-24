@@ -9,6 +9,7 @@ import com.googlecode.qlink.api.behavior.DoResultAsList;
 import com.googlecode.qlink.api.behavior.DoResultAsSingleValue;
 import com.googlecode.qlink.api.functor.Aggregator;
 import com.googlecode.qlink.api.functor.Folder;
+import com.googlecode.qlink.api.functor.Predicate;
 import com.googlecode.qlink.api.functor.Reducer;
 import com.googlecode.qlink.api.functor.SamplePredicate;
 import com.googlecode.qlink.api.tuple.Pair;
@@ -21,23 +22,24 @@ import com.googlecode.qlink.core.context.enums.ETransformResultType;
 import com.googlecode.qlink.core.functor.SamplePredicates;
 import com.googlecode.qlink.core.utils.AggregationUtils;
 import com.googlecode.qlink.core.utils.SimpleAssert;
+import com.googlecode.qlink.core.utils.StackPruningUtils;
 import com.googlecode.qlink.hibernate.context.HibernatePipelineContext;
 import com.googlecode.qlink.hibernate.functor.SqlClauseSnippet;
+import com.googlecode.qlink.hibernate.pruning.HibernatePruningRules;
 import com.googlecode.qlink.hibernate.utils.SqlAwareAggregationUtils;
-
 
 public class HibernateDoResultAsSingleValue<T, TPlugin>
 	extends PipelineContextAwareSupport
 	implements DoResultAsSingleValue<T, TPlugin>
 {
 
-	private final HIbernateDoResultAsList<T, TPlugin> doResultAsList;
+	private final HibernateDoResultAsList<T, TPlugin> doResultAsList;
 
 	@SuppressWarnings("unchecked")
 	public HibernateDoResultAsSingleValue(IPipelineContext ctxt)
 	{
 		super(ctxt);
-		doResultAsList = (HIbernateDoResultAsList<T, TPlugin>) getCtxt().getFactory().create(DoResultAsList.class);
+		doResultAsList = (HibernateDoResultAsList<T, TPlugin>) getCtxt().getFactory().create(DoResultAsList.class);
 	}
 
 	private HibernatePipelineContext getHibernateCtxt()
@@ -126,8 +128,11 @@ public class HibernateDoResultAsSingleValue<T, TPlugin>
 
 	private Object[] applyAggregatorsInSql(List<Aggregator<?, ?>> aggregators)
 	{
+		Predicate<?> filterPredicate =
+			StackPruningUtils.createFilterPredicate(HibernatePruningRules.filterPruner, getCtxt().getPipelineDef()
+				.getFilterStack());
 
-		String whereClause = doResultAsList.getWhereClause();
+		String whereClause = doResultAsList.getWhereClause(filterPredicate);
 
 		String orderClause = doResultAsList.getOrderClause();
 
@@ -135,7 +140,7 @@ public class HibernateDoResultAsSingleValue<T, TPlugin>
 
 		String fromClause = doResultAsList.getFromClause();
 
-		String hql = doResultAsList.composeHqlQuery(selectClause, fromClause, whereClause, orderClause);
+		String hql = doResultAsList.composeHqlQueryFromComponents(selectClause, fromClause, whereClause, orderClause);
 
 		List<Object> params = doResultAsList.getQueryParams();
 

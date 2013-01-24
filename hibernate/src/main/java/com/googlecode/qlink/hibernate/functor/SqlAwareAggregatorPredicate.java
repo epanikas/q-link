@@ -29,8 +29,8 @@ public class SqlAwareAggregatorPredicate<T>
 	@Override
 	public String getSqlClause()
 	{
-		return ((SqlClauseSnippet) getAggregator()).getSqlClause() + SqlAwarePredicates.conditionToSqlCond(getCondition())
-			+ " ?";
+		return ((SqlClauseSnippet) getAggregator()).getSqlClause()
+			+ SqlAwarePredicates.propertyConditionToSql(getCondition(), getVal());
 	}
 
 	@Override

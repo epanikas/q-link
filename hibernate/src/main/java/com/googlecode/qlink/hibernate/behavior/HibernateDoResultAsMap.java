@@ -25,13 +25,12 @@ import com.googlecode.qlink.core.functor.SamplePredicates;
 import com.googlecode.qlink.core.utils.SimpleAssert;
 import com.googlecode.qlink.core.utils.StackPruningUtils;
 import com.googlecode.qlink.core.utils.TypedBeanUtils;
+import com.googlecode.qlink.hibernate.functor.SqlAwareAggregators.AggregatorToFunction2Adaptor;
 import com.googlecode.qlink.hibernate.functor.SqlAwareFunctions;
 import com.googlecode.qlink.hibernate.functor.SqlClauseSnippet;
-import com.googlecode.qlink.hibernate.functor.SqlAwareAggregators.AggregatorToFunction2Adaptor;
 import com.googlecode.qlink.hibernate.pruning.HibernatePruningRules;
 import com.googlecode.qlink.hibernate.utils.SqlAwareFunctionUtils;
 import com.googlecode.qlink.tuples.Tuples;
-
 
 public class HibernateDoResultAsMap<K, V, TPlugin>
 	extends HibernateDoResultSupport
@@ -203,7 +202,11 @@ public class HibernateDoResultAsMap<K, V, TPlugin>
 			StackPruningUtils.createHavingPredicate(HibernatePruningRules.filterPruner, getCtxt().getPipelineDef()
 				.getHavingStack());
 
-		String whereClause = getWhereClause();
+		Predicate<?> filterPredicate =
+			StackPruningUtils.createFilterPredicate(HibernatePruningRules.filterPruner, getCtxt().getPipelineDef()
+				.getFilterStack());
+
+		String whereClause = getWhereClause(filterPredicate);
 
 		String orderClause = getOrderClause();
 
@@ -214,7 +217,7 @@ public class HibernateDoResultAsMap<K, V, TPlugin>
 		String groupBySelectClause = getGroupBySelectClause();
 
 		SqlClauseSnippet havingClausePredicate = (SqlClauseSnippet) havingPredicate;
-		String havingClause = havingClausePredicate == null ? null : havingClausePredicate.getSqlClause();//getHavingClause();
+		String havingClause = havingClausePredicate == null ? null : havingClausePredicate.getSqlClause();
 
 		String hql = "";
 		hql += "SELECT " + groupByClause + " ";

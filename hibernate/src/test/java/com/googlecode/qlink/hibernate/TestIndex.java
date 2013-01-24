@@ -18,7 +18,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import com.googlecode.qlink.api.tuple.Pair;
 import com.googlecode.qlink.hibernate.da.Person;
 import com.googlecode.qlink.hibernate.da.TestUtils;
-import com.googlecode.qlink.hibernate.factory.HibernateFactory;
+import com.googlecode.qlink.hibernate.factory.QLinkHibernateFactory;
 import com.googlecode.qlink.tuples.Tuples;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -30,7 +30,7 @@ public class TestIndex
 	private HibernateTemplate hibernateTemplate;
 
 	@Autowired
-	private HibernateFactory hibernateFactory;
+	private QLinkHibernateFactory hibernateFactory;
 
 	List<Person> persons = new ArrayList<Person>();
 

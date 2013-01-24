@@ -1,5 +1,6 @@
 package com.googlecode.qlink.hibernate.behavior;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -25,8 +26,8 @@ import com.googlecode.qlink.hibernate.utils.SqlAwareFunctionUtils;
 class HibernateDoResultSupport
 	extends PipelineContextAwareSupport
 {
-	private Predicate<?> filterPredicate;
-	private SamplePredicate samplePredicate;
+	//	private Predicate<?> filterPredicate;
+	//	private SamplePredicate samplePredicate;
 
 	protected HibernateDoResultSupport(IPipelineContext ctxt)
 	{
@@ -56,13 +57,8 @@ class HibernateDoResultSupport
 		return getHibernateCtxt().getSourceCls().getName();
 	}
 
-	public String getWhereClause()
+	public String getWhereClause(Predicate<?> filterPredicate)
 	{
-		if (filterPredicate == null) {
-			filterPredicate =
-				StackPruningUtils.createFilterPredicate(HibernatePruningRules.filterPruner, getCtxt().getPipelineDef()
-					.getFilterStack());
-		}
 
 		if (filterPredicate == null || filterPredicate instanceof SqlClauseSnippet == false) {
 			return null;
@@ -86,10 +82,10 @@ class HibernateDoResultSupport
 		return c.getSqlClause();
 	}
 
-	public String getSelectClause()
+	public String getSelectClause(SamplePredicate samplePredicate)
 	{
 
-		if (getSamplePredicate() != null) {
+		if (samplePredicate != null) {
 			return null;
 		}
 
@@ -109,41 +105,46 @@ class HibernateDoResultSupport
 
 	public List<Object> getQueryParams()
 	{
+		Predicate<?> filterPredicate =
+			StackPruningUtils.createFilterPredicate(HibernatePruningRules.filterPruner, getCtxt().getPipelineDef()
+				.getFilterStack());
+
 		if (filterPredicate == null || filterPredicate instanceof SqlClauseSnippet == false) {
 			return null;
 		}
 
 		final SqlClauseSnippet f = (SqlClauseSnippet) filterPredicate;
-		return f == null ? null : (f).getParams();
+		List<Object> params = new ArrayList<Object>(f == null ? null : (f).getParams());
+
+		CollectionUtils.filter(params, new org.apache.commons.collections.Predicate() {
+
+			@Override
+			public boolean evaluate(Object obj)
+			{
+				return obj != null;
+			}
+		});
+
+		return params;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected Object makeRowResultInSql(boolean countOnly)
 	{
+		SamplePredicate samplePredicate = createSamplePredicate();
 
-		SamplePredicate samplePredicate = getSamplePredicate();
+		Predicate<?> filterPredicate =
+			StackPruningUtils.createFilterPredicate(HibernatePruningRules.filterPruner, getCtxt().getPipelineDef()
+				.getFilterStack());
 
-		/*
-		 * we can use count in sql only in case of absence sampling predicate, 
-		 * since it can alter the count result
-		 */
-		boolean useSqlCount = countOnly && samplePredicate == null;
-
-		String whereClause = getWhereClause();
-
-		String orderClause = getOrderClause();
-
-		String selectClause = useSqlCount ? "count(1)" : getSelectClause();
-
-		String fromClause = getFromClause();
-
-		String hql = composeHqlQuery(selectClause, fromClause, whereClause, orderClause);
+		String hql = doComposeHqlQuery(countOnly);
 
 		List<Object> params = getQueryParams();
 
 		HibernateTemplate template = getHibernateCtxt().getHibernateTemplate();
 
 		Object res = null;
-		if (params != null) {
+		if (params != null && params.size() > 0) {
 			res = template.find(hql, params.toArray(new Object[]{}));
 		}
 		else {
@@ -160,11 +161,12 @@ class HibernateDoResultSupport
 
 		List<?> lstRes = (List<?>) res;
 
-		final Predicate<Object> f =
-			(Predicate<Object>) StackPruningUtils.createFilterPredicate(HibernatePruningRules.filterPruner, getCtxt()
-				.getPipelineDef().getFilterStack());
+		//		final Predicate<Object> f =
+		//			(Predicate<Object>) StackPruningUtils.createFilterPredicate(HibernatePruningRules.filterPruner, getCtxt()
+		//				.getPipelineDef().getFilterStack());
 
-		if (f != null && f instanceof SqlClauseSnippet == false) {
+		final Predicate<Object> f = (Predicate<Object>) filterPredicate;
+		if (filterPredicate != null && filterPredicate instanceof SqlClauseSnippet == false) {
 
 			CollectionUtils.filter(lstRes, new org.apache.commons.collections.Predicate() {
 
@@ -211,7 +213,74 @@ class HibernateDoResultSupport
 		return res;
 	}
 
-	public String composeHqlQuery(String selectClause, String fromClause, String whereClause, String orderClause)
+	public boolean isPureHql()
+	{
+		Predicate<?> filter =
+			StackPruningUtils.createFilterPredicate(HibernatePruningRules.filterPruner, getCtxt().getPipelineDef()
+				.getFilterStack());
+
+		Comparator<?> comparator =
+			StackPruningUtils.createComparator(HibernatePruningRules.orderPruner, getCtxt().getPipelineDef()
+				.getOrderStack());
+
+		Visitor2<?, Integer> visitor =
+			StackPruningUtils.createVisitor(HibernatePruningRules.visitorPruner, getCtxt().getPipelineDef()
+				.getVisitStack());
+
+		SamplePredicate sample = createSamplePredicate();
+
+		if (filter != null && filter instanceof SqlClauseSnippet == false) {
+			return false;
+		}
+
+		if (comparator != null && comparator instanceof SqlClauseSnippet == false) {
+			return false;
+		}
+
+		if (sample != null) {
+			return false;
+		}
+
+		if (visitor != null) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public String composeHqlQuery(boolean countOnly)
+	{
+		return doComposeHqlQuery(countOnly);
+	}
+
+	private String doComposeHqlQuery(boolean countOnly)
+	{
+		SamplePredicate samplePredicate = createSamplePredicate();
+
+		/*
+		 * we can use count in sql only in case of absence sampling predicate, 
+		 * since it can alter the count result
+		 */
+		boolean useSqlCount = countOnly && samplePredicate == null;
+
+		Predicate<?> filterPredicate =
+			StackPruningUtils.createFilterPredicate(HibernatePruningRules.filterPruner, getCtxt().getPipelineDef()
+				.getFilterStack());
+
+		String whereClause = getWhereClause(filterPredicate);
+
+		String orderClause = getOrderClause();
+
+		String selectClause = useSqlCount ? "count(1)" : getSelectClause(samplePredicate);
+
+		String fromClause = getFromClause();
+
+		String hql = composeHqlQueryFromComponents(selectClause, fromClause, whereClause, orderClause);
+
+		return hql;
+	}
+
+	String composeHqlQueryFromComponents(String selectClause, String fromClause, String whereClause, String orderClause)
 	{
 
 		String hql = "";
@@ -232,11 +301,8 @@ class HibernateDoResultSupport
 		return hql;
 	}
 
-	private SamplePredicate getSamplePredicate()
+	private SamplePredicate createSamplePredicate()
 	{
-		if (samplePredicate != null) {
-			return samplePredicate;
-		}
 
 		SamplePredicate sp = getCtxt().getPipelineDef().getSamplePredicate();
 		if (sp == null) {
@@ -245,7 +311,6 @@ class HibernateDoResultSupport
 					.getPipelineDef().getSampleParam());
 		}
 
-		samplePredicate = sp;
 		return sp;
 	}
 

@@ -1,6 +1,6 @@
 package com.googlecode.qlink.hibernate.factory;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
 import com.googlecode.qlink.api.definition.EntryPointDef;
@@ -9,10 +9,21 @@ import com.googlecode.qlink.core.context.PipelineContextAwarePlugin;
 import com.googlecode.qlink.core.definition.EntryPointDefImpl;
 import com.googlecode.qlink.hibernate.context.HibernatePipelineContext;
 
-public class HibernateFactory
+public class QLinkHibernateFactory
 {
-	@Autowired
 	private HibernateTemplate hibernateTemplate;
+
+	private boolean allowCreateNewSession = true;
+
+	public void setAllowCreateNewSession(boolean allowCreateNewSession)
+	{
+		this.allowCreateNewSession = allowCreateNewSession;
+	}
+
+	public void setSessionFactory(SessionFactory sessionFactory)
+	{
+		hibernateTemplate = new HibernateTemplate(sessionFactory, allowCreateNewSession);
+	}
 
 	public void setHibernateTemplate(HibernateTemplate hibernateTemplate)
 	{
