@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/changes/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
+	
+	<properties>
+		<title>Change log for q-Link :: In memory</title>
+	</properties>
+	
+	<body>
+	
+		<release version="0.0.8">	
+			<action dev="epanikas" type="update">added tests</action>
+		</release>
+		
+		<release version="0.0.7">	
+			<action dev="epanikas" type="update">renamed ListSourceFactory to QLinkInMemoryFactory</action>
+		</release>
+		
+		<release version="0.0.6">
+			<action dev="epanikas" type="add">deployed on central maven repository</action>
+			<action dev="epanikas" type="add">first maven release</action>
+		</release>
+		
+	</body>
+	
+</document>

@@ -15,7 +15,7 @@ import com.googlecode.qlink.mem.factory.QLinkInMemoryFactory;
 
 public class TestFilter
 {
-	private final QLinkInMemoryFactory simpleFactory = new QLinkInMemoryFactory();
+	private final QLinkInMemoryFactory sf = new QLinkInMemoryFactory();
 
 	List<Person> persons = new ArrayList<Person>();
 
@@ -37,7 +37,7 @@ public class TestFilter
 		/*
 		 * when
 		 */
-		List<String> res = simpleFactory.forList(strings)//
+		List<String> res = sf.forList(strings)//
 			.filter().with(new Predicate<String>() {
 
 				@Override
@@ -68,8 +68,8 @@ public class TestFilter
 		 * when
 		 */
 		List<Person> res =
-			simpleFactory.forList(persons).filter().p("name", String.class).eq("James").or().p("name", String.class)
-				.eq("John").toList();
+			sf.forList(persons).filter().p("name", String.class).eq("James").or().p("name", String.class).eq("John")
+				.toList();
 
 		/*
 		 * should
@@ -90,8 +90,8 @@ public class TestFilter
 		 * when
 		 */
 		List<Person> res =
-			simpleFactory.forList(persons).filter().p("name", String.class).eq("James").and().p("age", Integer.class)
-				.eq(25).toList();
+			sf.forList(persons).filter().p("name", String.class).eq("James").and().p("age", Integer.class).eq(25)
+				.toList();
 
 		/*
 		 * should
@@ -110,7 +110,7 @@ public class TestFilter
 		/*
 		 * when
 		 */
-		List<Person> res = simpleFactory.forList(persons).filter()//
+		List<Person> res = sf.forList(persons).filter()//
 			.begin()//
 			.p("name", String.class).eq("James")//
 			.or()//
@@ -139,8 +139,8 @@ public class TestFilter
 		 * when
 		 */
 		List<Person> res =
-			simpleFactory.forList(persons).filter().begin().begin().begin().begin().p("age").eq(28).or().p("age")
-				.eq(30).end().and().p("name").eq("Smith").end().end().end().toList();
+			sf.forList(persons).filter().begin().begin().begin().begin().p("age").eq(28).or().p("age").eq(30).end()
+				.and().p("name").eq("Smith").end().end().end().toList();
 
 		/*
 		 * should
@@ -163,7 +163,7 @@ public class TestFilter
 		/*
 		 * when
 		 */
-		List<Integer> lst = simpleFactory.forFewItems(1, 2, 3, 4, 5, 6, 7, 8, 9).filter().self().gt(5).toList();
+		List<Integer> lst = sf.forFewItems(1, 2, 3, 4, 5, 6, 7, 8, 9).filter().self().gt(5).toList();
 
 		/*
 		 * should
@@ -177,7 +177,7 @@ public class TestFilter
 		/*
 		 * when
 		 */
-		Person res = simpleFactory.forList(persons).filter().p("name").eq("Brian").toUniqueResult();
+		Person res = sf.forList(persons).filter().p("name").eq("Brian").toUniqueResult();
 
 		/*
 		 * should
@@ -192,7 +192,7 @@ public class TestFilter
 		/*
 		 * when
 		 */
-		simpleFactory.forList(persons).filter().p("age").gt(30).toUniqueResult();
+		sf.forList(persons).filter().p("age").gt(30).toUniqueResult();
 
 		/*
 		 * should
@@ -207,7 +207,7 @@ public class TestFilter
 		/*
 		 * when
 		 */
-		int n = simpleFactory.forList(persons).filter().p("age").gt(30).size();
+		int n = sf.forList(persons).filter().p("age").gt(30).size();
 
 		/*
 		 * should
@@ -217,12 +217,89 @@ public class TestFilter
 	}
 
 	@Test
+	public void testGreaterOrEqual()
+	{
+		/*
+		 * when
+		 */
+		int n = sf.forList(persons).filter().p("age").ge(30).size();
+
+		/*
+		 * should
+		 */
+		Assert.assertEquals(15, n);
+
+	}
+
+	@Test
+	public void testBetween()
+	{
+		/*
+		 * when
+		 */
+		int n = sf.forList(persons).filter().p("age").between(25, 28).size();
+
+		/*
+		 * should
+		 */
+		Assert.assertEquals(4, n);
+
+	}
+
+	@Test
+	public void testIn()
+	{
+		/*
+		 * when
+		 */
+		List<Person> lst = sf.forList(persons).filter().p("age").in(25, 28, 52).toList();
+
+		/*
+		 * should
+		 */
+		Assert.assertEquals(2, lst.size());
+
+	}
+
+	@Test
+	public void testInWithInnerQuery()
+	{
+		/*
+		 * when
+		 */
+		int n =
+			sf.forList(persons).filter().p("age", Integer.class)
+				.in(sf.forList(persons).filter().p("age").lt(28).select().p("age", Integer.class)).size();
+
+		/*
+		 * should
+		 */
+		Assert.assertEquals(3, n);
+
+	}
+
+	@Test
+	public void testLessOrEqual()
+	{
+		/*
+		 * when
+		 */
+		int n = sf.forList(persons).filter().p("age").le(30).size();
+
+		/*
+		 * should
+		 */
+		Assert.assertEquals(6, n);
+
+	}
+
+	@Test
 	public void testIsEmpty()
 	{
 		/*
 		 * when
 		 */
-		boolean empty = simpleFactory.forList(persons).filter().p("age").gt(30).isEmpty();
+		boolean empty = sf.forList(persons).filter().p("age").gt(30).isEmpty();
 
 		/*
 		 * should
@@ -230,4 +307,29 @@ public class TestFilter
 		Assert.assertEquals(false, empty);
 
 	}
+
+	@Test
+	public void testIsNull()
+	{
+		/*
+		 * given
+		 */
+		List<Person> persons1 = new ArrayList<Person>(persons);
+		Person nulled = new Person();
+		nulled.setName(null);
+		persons1.add(nulled);
+
+		/*
+		 * when
+		 */
+		int n1 = sf.forList(persons1).filter().p("name").isNull().size();
+		int n2 = sf.forList(persons1).filter().p("name").notNull().size();
+
+		/*
+		 * should
+		 */
+		Assert.assertEquals(1, n1);
+		Assert.assertEquals(20, n2);
+	}
+
 }
