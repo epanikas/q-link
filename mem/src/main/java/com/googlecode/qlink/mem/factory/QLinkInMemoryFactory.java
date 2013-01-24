@@ -10,7 +10,7 @@ import com.googlecode.qlink.core.context.PipelineContextAwarePlugin;
 import com.googlecode.qlink.core.definition.EntryPointDefImpl;
 import com.googlecode.qlink.mem.context.MemPipelineContext;
 
-public class ListSourceFactory
+public class QLinkInMemoryFactory
 {
 	public <T> EntryPointDef<T, PipelineContextAwarePlugin> forFewItems(T... lst)
 	{

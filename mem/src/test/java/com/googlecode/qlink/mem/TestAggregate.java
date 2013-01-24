@@ -2,6 +2,7 @@ package com.googlecode.qlink.mem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Assert;
@@ -12,12 +13,12 @@ import com.googlecode.qlink.api.functor.Folder;
 import com.googlecode.qlink.api.tuple.Tuple3;
 import com.googlecode.qlink.mem.da.Person;
 import com.googlecode.qlink.mem.da.TestUtils;
-import com.googlecode.qlink.mem.factory.ListSourceFactory;
+import com.googlecode.qlink.mem.factory.QLinkInMemoryFactory;
 
 public class TestAggregate
 {
 
-	private final ListSourceFactory simpleFactory = new ListSourceFactory();
+	private final QLinkInMemoryFactory simpleFactory = new QLinkInMemoryFactory();
 
 	List<Person> persons = new ArrayList<Person>();
 	List<Integer> sourceNumbers = new ArrayList<Integer>();
@@ -63,6 +64,24 @@ public class TestAggregate
 		 * should
 		 */
 		Assert.assertEquals(45, val);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testAggregateSumOnEmptyList()
+	{
+		/*
+		 * given
+		 */
+
+		/*
+		 * when
+		 */
+		int val = simpleFactory.forList(Collections.<Integer> emptyList()).aggregate().sum().toValue();
+
+		/*
+		 * should
+		 */
+		//Assert.assertEquals(0, val);
 	}
 
 	@Test

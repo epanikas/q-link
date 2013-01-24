@@ -6,11 +6,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.googlecode.qlink.api.functor.SamplePredicate;
-import com.googlecode.qlink.mem.factory.ListSourceFactory;
+import com.googlecode.qlink.mem.factory.QLinkInMemoryFactory;
 
 public class TestSample
 {
-	private final ListSourceFactory simpleFactory = new ListSourceFactory();
+	private final QLinkInMemoryFactory simpleFactory = new QLinkInMemoryFactory();
 
 	@Test
 	public void testEvenOdd()

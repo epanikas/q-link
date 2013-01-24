@@ -16,11 +16,11 @@ import com.googlecode.qlink.api.tuple.Tuple5;
 import com.googlecode.qlink.api.tuple.TupleN;
 import com.googlecode.qlink.mem.da.Person;
 import com.googlecode.qlink.mem.da.TestUtils;
-import com.googlecode.qlink.mem.factory.ListSourceFactory;
+import com.googlecode.qlink.mem.factory.QLinkInMemoryFactory;
 
 public class TestTransform
 {
-	private final ListSourceFactory simpleFactory = new ListSourceFactory();
+	private final QLinkInMemoryFactory simpleFactory = new QLinkInMemoryFactory();
 
 	List<Person> persons = new ArrayList<Person>();
 

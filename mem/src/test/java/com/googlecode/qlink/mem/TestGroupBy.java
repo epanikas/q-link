@@ -14,13 +14,13 @@ import com.googlecode.qlink.api.functor.Function2;
 import com.googlecode.qlink.api.tuple.Pair;
 import com.googlecode.qlink.mem.da.Person;
 import com.googlecode.qlink.mem.da.TestUtils;
-import com.googlecode.qlink.mem.factory.ListSourceFactory;
+import com.googlecode.qlink.mem.factory.QLinkInMemoryFactory;
 import com.googlecode.qlink.tuples.Tuples;
 
 public class TestGroupBy
 {
 
-	private final ListSourceFactory simpleFactory = new ListSourceFactory();
+	private final QLinkInMemoryFactory simpleFactory = new QLinkInMemoryFactory();
 
 	List<Person> persons = new ArrayList<Person>();
 

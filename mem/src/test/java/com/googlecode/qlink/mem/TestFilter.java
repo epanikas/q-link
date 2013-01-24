@@ -11,11 +11,11 @@ import org.junit.Test;
 import com.googlecode.qlink.api.functor.Predicate;
 import com.googlecode.qlink.mem.da.Person;
 import com.googlecode.qlink.mem.da.TestUtils;
-import com.googlecode.qlink.mem.factory.ListSourceFactory;
+import com.googlecode.qlink.mem.factory.QLinkInMemoryFactory;
 
 public class TestFilter
 {
-	private final ListSourceFactory simpleFactory = new ListSourceFactory();
+	private final QLinkInMemoryFactory simpleFactory = new QLinkInMemoryFactory();
 
 	List<Person> persons = new ArrayList<Person>();
 

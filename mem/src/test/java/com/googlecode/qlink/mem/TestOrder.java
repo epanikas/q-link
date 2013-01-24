@@ -12,11 +12,11 @@ import org.junit.Test;
 
 import com.googlecode.qlink.mem.da.Person;
 import com.googlecode.qlink.mem.da.TestUtils;
-import com.googlecode.qlink.mem.factory.ListSourceFactory;
+import com.googlecode.qlink.mem.factory.QLinkInMemoryFactory;
 
 public class TestOrder
 {
-	private final ListSourceFactory simpleFactory = new ListSourceFactory();
+	private final QLinkInMemoryFactory simpleFactory = new QLinkInMemoryFactory();
 
 	List<Person> persons = new ArrayList<Person>();
 	List<ComparablePerson> comparablePersons = new ArrayList<TestOrder.ComparablePerson>();
