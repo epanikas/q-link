@@ -10,7 +10,6 @@
 	<body>
 	
 		<release version="0.0.7">	
-			<action dev="epanikas" type="add">added delegator interfaces for DoResult...</action>
 			<action dev="epanikas" type="update">renamed neq to ne</action>
 		</release>
 		
