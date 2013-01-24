@@ -10,8 +10,9 @@
 	<body>
 	
 		<release version="0.0.7">	
-			<action dev="epanikas" type="add">added delegator interfaces for DoResult...</action>
-			<action dev="epanikas" type="update">renamed neq to ne</action>
+			<action dev="epanikas" type="update">renamed HibernateFactory to QLinkHibernateFactory</action>
+			<action dev="epanikas" type="add">implemented in, between and le in filter condition</action>
+			<action dev="epanikas" type="add">implemented in with nested sql</action>
 		</release>
 		
 		<release version="0.0.6">
