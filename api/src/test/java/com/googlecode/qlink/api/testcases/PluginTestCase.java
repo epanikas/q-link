@@ -71,7 +71,7 @@ public class PluginTestCase
 
 	public void testCase4()
 	{
-		customFactory.forList(employees).filter().p("occupation", Occupation.class).neq().val(Occupation.bigBoss).and()
+		customFactory.forList(employees).filter().p("occupation", Occupation.class).ne().val(Occupation.bigBoss).and()
 			.p("carState", CarState.class).eq().val(CarState.pimpMyRide).plugin().delete();
 	}
 }

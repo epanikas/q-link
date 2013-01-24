@@ -7,7 +7,7 @@ public interface Condition<T, TEnd>
 
 	RhsFilterOpDef<T, TEnd> eq();
 
-	RhsFilterOpDef<T, TEnd> neq();
+	RhsFilterOpDef<T, TEnd> ne();
 
 	RhsFilterOpDef<T, TEnd> lt();
 
