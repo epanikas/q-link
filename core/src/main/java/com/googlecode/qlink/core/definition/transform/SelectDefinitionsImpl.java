@@ -33,6 +33,7 @@ import com.googlecode.qlink.core.behavior.CanFilterImpl;
 import com.googlecode.qlink.core.behavior.CanIndexImpl;
 import com.googlecode.qlink.core.behavior.CanOrderImpl;
 import com.googlecode.qlink.core.behavior.CanVisitImpl;
+import com.googlecode.qlink.core.behavior.DoResultAsListDelegator;
 import com.googlecode.qlink.core.context.IPipelineContext;
 import com.googlecode.qlink.core.context.PipelineContextAwareSupport;
 import com.googlecode.qlink.core.context.TPropertyImpl;
@@ -45,7 +46,8 @@ public class SelectDefinitionsImpl
 
 	public static class SelectDefSupportImpl<TRes, TPlugin>
 		extends PipelineContextAwareSupport
-		implements SelectDefSupport<TRes, TPlugin>
+		implements SelectDefSupport<TRes, TPlugin>, DoResultAsListDelegator<TRes, TPlugin>
+
 	{
 
 		private final DoResultAsList<TRes, TPlugin> doResult;
@@ -164,6 +166,12 @@ public class SelectDefinitionsImpl
 		public TPlugin plugin()
 		{
 			return doResult.plugin();
+		}
+
+		@Override
+		public DoResultAsList<TRes, TPlugin> getDoResultAsListDelegate()
+		{
+			return doResult;
 		}
 
 	}

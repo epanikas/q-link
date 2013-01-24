@@ -115,7 +115,7 @@ public class ConditionImpl<R, TEnd>
 	}
 
 	@Override
-	public RhsFilterOpDef<R, TEnd> neq()
+	public RhsFilterOpDef<R, TEnd> ne()
 	{
 		pushToStack(FilterBlock.forCondition(EFilterCondition.neq));
 		return new RhsFilterOpDefImpl<R, TEnd>(getCtxt(), end, isHaving);
