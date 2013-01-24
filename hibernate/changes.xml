@@ -9,7 +9,7 @@
 	
 	<body>
 	
-		<release version="0.0.7">	
+		<release version="0.0.8">	
 			<action dev="epanikas" type="update">next release (no changes in this module)</action>
 		</release>
 		
