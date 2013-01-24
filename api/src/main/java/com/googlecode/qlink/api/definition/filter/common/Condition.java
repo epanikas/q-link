@@ -29,9 +29,14 @@ public interface Condition<T, TEnd>
 
 	TEnd le(T val);
 
+	TEnd isNull();
+
+	TEnd notNull();
+
 	TEnd between(T val1, T val2);
 
 	TEnd in(DoResultAsList<T, ?> val);
 
 	TEnd in(T... lst);
+
 }
