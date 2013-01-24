@@ -10,6 +10,10 @@
 	<body>
 	
 		<release version="0.0.7">	
+			<action dev="epanikas" type="update">next release (no changes in this module)</action>
+		</release>
+		
+		<release version="0.0.7">	
 			<action dev="epanikas" type="update">renamed ListSourceFactory to QLinkInMemoryFactory</action>
 		</release>
 		
