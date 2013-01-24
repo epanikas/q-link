@@ -84,6 +84,22 @@ public class ConditionImpl<R, TEnd>
 	}
 
 	@Override
+	public TEnd isNull()
+	{
+		pushToStack(FilterBlock.forCondition(EFilterCondition.eq));
+		pushToStack(FilterBlock.forValue(null));
+		return this.end;
+	}
+
+	@Override
+	public TEnd notNull()
+	{
+		pushToStack(FilterBlock.forCondition(EFilterCondition.neq));
+		pushToStack(FilterBlock.forValue(null));
+		return this.end;
+	}
+
+	@Override
 	public TEnd between(R val1, R val2)
 	{
 		pushToStack(FilterBlock.forCondition(EFilterCondition.between));
