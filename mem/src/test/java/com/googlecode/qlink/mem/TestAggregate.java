@@ -76,12 +76,31 @@ public class TestAggregate
 		/*
 		 * when
 		 */
-		int val = simpleFactory.forList(Collections.<Integer> emptyList()).aggregate().sum().toValue();
+		simpleFactory.forList(Collections.<Integer> emptyList()).aggregate().sum().toValue();
 
 		/*
 		 * should
 		 */
-		//Assert.assertEquals(0, val);
+		// should throw an exception
+	}
+
+	@Test
+	public void testAggregateSumOnListOfOne()
+	{
+		/*
+		 * given
+		 */
+		List<Integer> listOne = Arrays.asList(2);
+
+		/*
+		 * when
+		 */
+		int val = simpleFactory.forList(listOne).aggregate().sum().toValue();
+
+		/*
+		 * should
+		 */
+		Assert.assertEquals(2, val);
 	}
 
 	@Test

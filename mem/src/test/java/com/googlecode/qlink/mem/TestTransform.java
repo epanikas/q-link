@@ -14,6 +14,7 @@ import com.googlecode.qlink.api.tuple.Pair;
 import com.googlecode.qlink.api.tuple.Tuple4;
 import com.googlecode.qlink.api.tuple.Tuple5;
 import com.googlecode.qlink.api.tuple.TupleN;
+import com.googlecode.qlink.mem.da.Employee;
 import com.googlecode.qlink.mem.da.Person;
 import com.googlecode.qlink.mem.da.TestUtils;
 import com.googlecode.qlink.mem.factory.QLinkInMemoryFactory;
@@ -188,6 +189,22 @@ public class TestTransform
 		Assert.assertEquals(20, lst.size());
 		MyCoolJob p = lst.get(0);
 		Assert.assertEquals("James", p.getEmployeeName());
+	}
+
+	@Test
+	public void testAsNewObjectWithSelf()
+	{
+		/*
+		 * when
+		 */
+		List<Employee> lst = simpleFactory.forList(persons).select().self().asNew(Employee.class).toList();
+
+		/*
+		 * should
+		 */
+		Assert.assertEquals(20, lst.size());
+		com.googlecode.qlink.mem.da.Employee p = lst.get(0);
+		Assert.assertEquals("James", p.getPerson().getName());
 	}
 
 	@Test

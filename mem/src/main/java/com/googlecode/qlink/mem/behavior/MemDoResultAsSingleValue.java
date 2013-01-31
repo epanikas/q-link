@@ -3,7 +3,6 @@ package com.googlecode.qlink.mem.behavior;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import com.googlecode.qlink.api.behavior.DoResultAsList;
 import com.googlecode.qlink.api.behavior.DoResultAsSingleValue;
 import com.googlecode.qlink.api.functor.Aggregator;
@@ -21,7 +20,6 @@ import com.googlecode.qlink.core.functor.SamplePredicates;
 import com.googlecode.qlink.core.utils.AggregationUtils;
 import com.googlecode.qlink.core.utils.SimpleAssert;
 import com.googlecode.qlink.mem.utils.MemAggregationUtils;
-
 
 public class MemDoResultAsSingleValue<T, TPlugin>
 	extends PipelineContextAwareSupport
@@ -82,9 +80,9 @@ public class MemDoResultAsSingleValue<T, TPlugin>
 		}
 
 		Object[] aggregatedResult = new Object[aggregators.size()];
-		if (lst.size() < 2) {
-			throw new IllegalArgumentException("not enough elements to apply reduce (" + lst.size()
-				+ "), and no reducer was specified for " + getCtxt());
+		if (lst.size() < 1) {
+			throw new IllegalArgumentException("not enough elements to apply aggregate (" + lst.size()
+				+ "), for " + getCtxt());
 		}
 
 		int i = 0;
@@ -99,8 +97,8 @@ public class MemDoResultAsSingleValue<T, TPlugin>
 		ETransformResultType aggregateResultType = getCtxt().getPipelineDef().getAggregatedResultType();
 		Class<?> aggregateResultClass = getCtxt().getPipelineDef().getAggregatedResultClass();
 
-		return (T) AggregationUtils.adaptAggregatedResult(aggregatedResult, getCtxt().getPipelineDef()
-			.getAggregators(), aggregateResultType, aggregateResultClass);
+		return (T) AggregationUtils.adaptAggregatedResult(aggregatedResult,
+			getCtxt().getPipelineDef().getAggregators(), aggregateResultType, aggregateResultClass);
 
 	}
 

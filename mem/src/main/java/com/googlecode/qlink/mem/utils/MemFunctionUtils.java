@@ -54,6 +54,12 @@ public class MemFunctionUtils
 					functions[i++] = Functions.adaptToFunctionWithIndex(ts.getFunction());
 					break;
 
+				case elem:
+					functions[i++] = Functions.adaptToFunctionWithIndex(Functions.identity(ts.getConstant()));
+					break;
+
+				case elemIndex:
+
 				default:
 					throw new IllegalArgumentException("unrecognized type " + ts.getType() + ": " + ts);
 			}
