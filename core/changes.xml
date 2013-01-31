@@ -9,6 +9,10 @@
 	
 	<body>
 	
+		<release version="0.0.9">	
+			<action dev="epanikas" type="add">implemented self in select</action>
+		</release>
+		
 		<release version="0.0.8">	
 			<action dev="epanikas" type="add">implemented isNull and notNull conditions</action>
 			<action dev="epanikas" type="update">implemented le, ge, in, between conditions</action>
