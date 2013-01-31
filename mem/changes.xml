@@ -9,6 +9,11 @@
 	
 	<body>
 	
+		<release version="0.0.9">	
+			<action dev="epanikas" type="add">implemented self in select</action>
+			<action dev="epanikas" type="fix">aggregate for lists with one element</action>
+		</release>
+	
 		<release version="0.0.8">	
 			<action dev="epanikas" type="update">added tests</action>
 		</release>
