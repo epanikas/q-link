@@ -28,7 +28,7 @@ limitations under the License.
 
 	<groupId>com.googlecode.q-link</groupId>
 	<artifactId>q-link-parent</artifactId>
-	<version>0.0.9</version>
+	<version>0.0.10-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>q-Link</name>
