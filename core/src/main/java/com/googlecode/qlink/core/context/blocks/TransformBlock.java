@@ -141,6 +141,12 @@ public class TransformBlock
 			case valueAggregator:
 				return aggregatorType != null ? aggregatorType.name() : aggregator.toString();
 
+			case elem:
+				return "elem";
+
+			case elemIndex:
+				return "elemIndex";
+
 			default:
 				throw new IllegalArgumentException("unknown transform type " + type);
 		}

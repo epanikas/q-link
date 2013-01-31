@@ -58,6 +58,18 @@ public class Functions
 		};
 	}
 
+	public static <T> Function<T, T> identity(final T constant)
+	{
+		return new Function<T, T>() {
+
+			@Override
+			public T apply(T input)
+			{
+				return input;
+			}
+		};
+	}
+
 	@SuppressWarnings("unchecked")
 	public static <A, B> Function2<A, Integer, B> adaptToFunctionWithIndex(final Function<A, B> f)
 	{
