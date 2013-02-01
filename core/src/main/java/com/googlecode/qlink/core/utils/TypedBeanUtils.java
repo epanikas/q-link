@@ -2,7 +2,6 @@ package com.googlecode.qlink.core.utils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
@@ -44,12 +43,27 @@ public class TypedBeanUtils
 		Constructor<?>[] constructors = cls.getConstructors();
 		for (Constructor<?> con : constructors) {
 			Class<?>[] conParams = con.getParameterTypes();
-			if (Arrays.equals(conParams, params)) {
+			if (assignableTypes(conParams, params)) {
 				return (Constructor<R>) con;
 			}
 		}
 
 		return null;
+	}
+
+	private static boolean assignableTypes(Class<?>[] conParams, Class<?>[] params)
+	{
+		if (conParams.length != params.length) {
+			return false;
+		}
+
+		for (int i = 0; i < conParams.length; ++i) {
+			if (conParams[i].isAssignableFrom(params[i]) == false) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	public static <R> R createObjectForClass(Class<R> cls, Object[] args)

@@ -4,6 +4,7 @@ import com.googlecode.qlink.api.functor.Function;
 import com.googlecode.qlink.api.functor.Function2;
 import com.googlecode.qlink.api.functor.Visitor;
 import com.googlecode.qlink.api.functor.Visitor2;
+import com.googlecode.qlink.api.tuple.Pair;
 import com.googlecode.qlink.core.utils.TypedBeanUtils;
 
 public class Functions
@@ -42,6 +43,32 @@ public class Functions
 		}
 	}
 
+	public static <K, V> Function<Pair<K, V>, K> key()
+	{
+		return new Function<Pair<K, V>, K>() {
+
+			@Override
+			public K apply(Pair<K, V> input)
+			{
+				return input.getFirst();
+			}
+
+		};
+	}
+
+	public static <K, V> Function<Pair<K, V>, V> value()
+	{
+		return new Function<Pair<K, V>, V>() {
+
+			@Override
+			public V apply(Pair<K, V> input)
+			{
+				return input.getSecond();
+			}
+
+		};
+	}
+
 	public static <T, R> Function<T, R> propertyAccessor(String propName, Class<R> propClass)
 	{
 		return new Functions.PropertyAccessor<T, R>(propName, propClass);
@@ -58,7 +85,7 @@ public class Functions
 		};
 	}
 
-	public static <T> Function<T, T> identity(final T constant)
+	public static <T> Function<T, T> identity()
 	{
 		return new Function<T, T>() {
 
