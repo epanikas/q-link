@@ -6,8 +6,10 @@ import java.util.Collections;
 import java.util.List;
 
 import com.googlecode.qlink.api.functor.Aggregator;
+import com.googlecode.qlink.api.functor.Function;
 import com.googlecode.qlink.api.functor.Function2;
 import com.googlecode.qlink.api.functor.TProperty;
+import com.googlecode.qlink.api.tuple.Pair;
 import com.googlecode.qlink.core.context.enums.EAggregatorType;
 import com.googlecode.qlink.core.utils.SimpleAssert;
 import com.googlecode.qlink.core.utils.TypedBeanUtils;
@@ -213,6 +215,19 @@ public class Aggregators
 	public static <T, R extends Comparable<R>> Aggregator<T, R> maxOfProperty(final TProperty<R> prop)
 	{
 		return new MaxOfProperty<T, R>(prop);
+	}
+
+	public static <T, R> Function<Pair<?, Collection<T>>, R> adaptToPair(final Aggregator<T, R> agg)
+	{
+		return new Function<Pair<?, Collection<T>>, R>() {
+
+			@Override
+			public R apply(Pair<?, Collection<T>> input)
+			{
+				return agg.aggregate(input.getSecond());
+			}
+
+		};
 	}
 
 	public static class AggregatorToFunctionWithIndexAdaptor<T, O>
