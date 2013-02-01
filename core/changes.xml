@@ -9,6 +9,11 @@
 	
 	<body>
 	
+		<release version="0.0.10">	
+			<action dev="epanikas" type="add">added key/value to list of functions</action>
+			<action dev="epanikas" type="fix">using isAssignableFrom to search for ctor</action>
+		</release>
+	
 		<release version="0.0.9">	
 			<action dev="epanikas" type="add">implemented self in select</action>
 		</release>
