@@ -9,6 +9,10 @@
 	
 	<body>
 	
+		<release version="0.0.10">	
+			<action dev="epanikas" type="add">no changes</action>
+		</release>
+	
 		<release version="0.0.9">	
 			<action dev="epanikas" type="add">no changes</action>
 		</release>
