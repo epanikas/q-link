@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-
 import com.googlecode.qlink.api.behavior.DoResultAsList;
 import com.googlecode.qlink.api.behavior.DoResultAsMap;
 import com.googlecode.qlink.api.functor.Function2;
@@ -20,7 +19,7 @@ import com.googlecode.qlink.core.context.enums.EGroupByBlockType;
 import com.googlecode.qlink.core.utils.SimpleAssert;
 import com.googlecode.qlink.core.utils.StackPruningUtils;
 import com.googlecode.qlink.mem.pruning.MemPruningRules;
-
+import com.googlecode.qlink.tuples.Tuples;
 
 public class MemDoResultAsMap<K, V, TPlugin>
 	extends MemDoResultSupport
@@ -96,7 +95,7 @@ public class MemDoResultAsMap<K, V, TPlugin>
 
 				int ind = 0;
 				for (Map.Entry<K, V> entry : res.entrySet()) {
-					Object val = groupSelectFunction.apply(entry.getValue(), ind++);
+					Object val = groupSelectFunction.apply(Tuples.tie(entry.getKey(), entry.getValue()), ind++);
 
 					entry.setValue((V) val);
 				}
@@ -135,7 +134,8 @@ public class MemDoResultAsMap<K, V, TPlugin>
 			if (selectGroupTransformFunction != null) {
 				Map<K, V> transformedRes = new HashMap<K, V>();
 				for (Map.Entry<K, V> e : res.entrySet()) {
-					Object transformedLst = selectGroupTransformFunction.apply(e.getValue(), /*not used here*/0);
+					Object transformedLst =
+						selectGroupTransformFunction.apply(Tuples.tie(e.getKey(), e.getValue()), /*not used here*/0);
 					transformedRes.put(e.getKey(), (V) transformedLst);
 				}
 				res = transformedRes;

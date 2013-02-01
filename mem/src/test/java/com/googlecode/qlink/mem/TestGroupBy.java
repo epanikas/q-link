@@ -1,6 +1,7 @@
 package com.googlecode.qlink.mem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -227,4 +228,37 @@ public class TestGroupBy
 
 	}
 
+	public static class SameNamePersons
+	{
+		public String name;
+		public List<Person> persons = Collections.emptyList();
+
+		public SameNamePersons(String name, List<Person> persons)
+		{
+			this.name = name;
+			this.persons = persons;
+		}
+
+	}
+
+	@Test
+	public void testGroupByWithKeyValueTransformation()
+	{
+
+		/*
+		 * when
+		 */
+		Map<String, SameNamePersons> res =
+			simpleFactory.forList(persons).group().by(Person.Tp.name).selectAs().key().value()
+				.asNew(SameNamePersons.class).toMap();
+
+		/*
+		 * should
+		 */
+		Assert.assertEquals(16, res.size());
+		SameNamePersons bobs = res.get("Bob");
+		Assert.assertEquals(3, bobs.persons.size());
+		SameNamePersons davids = res.get("David");
+		Assert.assertEquals(3, davids.persons.size());
+	}
 }

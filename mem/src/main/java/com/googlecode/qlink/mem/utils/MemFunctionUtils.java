@@ -55,10 +55,18 @@ public class MemFunctionUtils
 					break;
 
 				case elem:
-					functions[i++] = Functions.adaptToFunctionWithIndex(Functions.identity(ts.getConstant()));
+					functions[i++] = Functions.adaptToFunctionWithIndex(Functions.identity());
 					break;
 
 				case elemIndex:
+
+				case key:
+					functions[i++] = Functions.adaptToFunctionWithIndex(Functions.key());
+					break;
+
+				case value:
+					functions[i++] = Functions.adaptToFunctionWithIndex(Functions.value());
+					break;
 
 				default:
 					throw new IllegalArgumentException("unrecognized type " + ts.getType() + ": " + ts);
