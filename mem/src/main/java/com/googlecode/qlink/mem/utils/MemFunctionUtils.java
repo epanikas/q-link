@@ -47,7 +47,7 @@ public class MemFunctionUtils
 				case valueAggregator:
 					Aggregator<?, ?> agg =
 						MemAggregationUtils.chooseAggregator(ts.getAggregatorType(), ts.getProperty());
-					functions[i++] = Aggregators.asFunctionWithIndex(agg);
+					functions[i++] = Functions.adaptToFunctionWithIndex(Aggregators.adaptToPair(agg));
 					break;
 
 				case functor:
@@ -58,8 +58,6 @@ public class MemFunctionUtils
 					functions[i++] = Functions.adaptToFunctionWithIndex(Functions.identity());
 					break;
 
-				case elemIndex:
-
 				case key:
 					functions[i++] = Functions.adaptToFunctionWithIndex(Functions.key());
 					break;
@@ -67,6 +65,9 @@ public class MemFunctionUtils
 				case value:
 					functions[i++] = Functions.adaptToFunctionWithIndex(Functions.value());
 					break;
+
+				case elemIndex:
+					throw new UnsupportedOperationException("unrecognized type " + ts.getType() + ": " + ts);
 
 				default:
 					throw new IllegalArgumentException("unrecognized type " + ts.getType() + ": " + ts);

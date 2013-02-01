@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.googlecode.qlink.api.tuple.Pair;
+import com.googlecode.qlink.mem.TestGroupBy.SameNamePersons;
 import com.googlecode.qlink.mem.da.Person;
 import com.googlecode.qlink.mem.da.TestUtils;
 import com.googlecode.qlink.mem.factory.QLinkInMemoryFactory;
@@ -126,4 +127,24 @@ public class TestSelectForGroup
 		Assert.assertEquals(31, maxAge);
 	}
 
+	@Test
+	public void testGroupByWithKeyValueTransformation()
+	{
+
+		/*
+		 * when
+		 */
+		Map<String, SameNamePersons> res =
+			simpleFactory.forList(persons).group().by(Person.Tp.name).selectAs().key().value()
+				.asNew(SameNamePersons.class).toMap();
+
+		/*
+		 * should
+		 */
+		Assert.assertEquals(16, res.size());
+		SameNamePersons bobs = res.get("Bob");
+		Assert.assertEquals(3, bobs.persons.size());
+		SameNamePersons davids = res.get("David");
+		Assert.assertEquals(3, davids.persons.size());
+	}
 }
